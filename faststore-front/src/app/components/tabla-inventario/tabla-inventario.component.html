@@ -1,0 +1,70 @@
+<div class="container">
+  <h1 class="page-title">📦 Control de Stock – FastStore</h1>
+
+  <div class="toast" *ngIf="toastMsg">{{ toastMsg }}</div>
+
+  <div class="toolbar">
+    <input type="text"
+           class="search-input"
+           [(ngModel)]="busqueda"
+           (input)="aplicarFiltro()"
+           placeholder="🔍 Buscar producto por nombre..." />
+    <button class="btn-low-stock" (click)="verLowStock()">
+      ⚠️ Ver Stock Crítico
+    </button>
+    <button class="btn-todos" (click)="verTodos()">
+      📋 Ver Todos
+    </button>
+    <span class="counter">{{ productosFiltrados.length }} producto(s) encontrado(s)</span>
+  </div> 
+
+  <div class="error-banner" *ngIf="errorCarga">⚠️ {{ errorCarga }}</div>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Categoría</th>
+          <th>Precio</th>
+          <th>Stock Actual</th>
+          <th>Stock Mínimo</th>
+          <th>Estado</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of productosFiltrados" [class.row-critico]="p.stockCritico">
+          <td>{{ p.id }}</td>
+          <td>{{ p.nombre }}</td>
+          <td>{{ p.categoriaNombre }}</td>
+          <td>{{ formatPrecio(p.precio) }}</td>
+          <td>
+            <span [class.stock-critico]="p.stockCritico">
+              {{ p.stockActual }}
+              <span *ngIf="p.stockCritico" class="badge-critico">⚠ Crítico</span>
+            </span>
+          </td>
+          <td>{{ p.stockMinimo }}</td>
+          <td>
+            <span class="status-badge" [class.badge-ok]="!p.stockCritico" [class.badge-low]="p.stockCritico">
+              {{ p.stockCritico ? 'Bajo stock' : 'Normal' }}
+            </span>
+          </td>
+          <td>
+            <button class="btn-reponer" (click)="abrirModal(p)">Reponer</button>
+          </td>
+        </tr>
+        <tr *ngIf="productosFiltrados.length === 0">
+          <td colspan="8" class="no-results">No se encontraron productos.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <app-reponer-modal *ngIf="productoSeleccionado"
+                     [producto]="productoSeleccionado"
+                     (cerrar)="cerrarModal()"
+                     (exito)="onExitoOrden($event)" />
+</div>

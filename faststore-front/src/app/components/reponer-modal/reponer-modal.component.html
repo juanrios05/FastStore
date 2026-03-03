@@ -1,0 +1,35 @@
+<div class="modal-overlay" (click)="cancelar()">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+    <h2 class="modal-title">Orden de Reposición</h2>
+
+    <div class="producto-info">
+      <p><strong>Producto:</strong> {{ producto.nombre }}</p>
+      <p><strong>Stock actual:</strong> {{ producto.stockActual }} / Mínimo: {{ producto.stockMinimo }}</p>
+      <p><strong>Categoría:</strong> {{ producto.categoriaNombre }}</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="confirmar()">
+      <div class="form-group">
+        <label for="cantidad">Cantidad a reponer <span class="required">*</span></label>
+        <input id="cantidad"
+               type="number"
+               formControlName="cantidad"
+               placeholder="Ingresa la cantidad"
+               min="1" />
+        <span class="error-text"
+              *ngIf="form.get('cantidad')?.invalid && form.get('cantidad')?.touched">
+          La cantidad es obligatoria y debe ser mayor a cero.
+        </span>
+      </div>
+
+      <div class="error-text" *ngIf="errorMsg">{{ errorMsg }}</div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-cancelar" (click)="cancelar()">Cancelar</button>
+        <button type="submit" class="btn-confirmar" [disabled]="cargando">
+          {{ cargando ? 'Guardando...' : 'Confirmar Orden' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
