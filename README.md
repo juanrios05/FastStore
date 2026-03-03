@@ -8,7 +8,7 @@ MVP para que el personal de bodega de FastStore pueda visualizar productos con s
 ## Tecnologías
 | Capa     | Tecnología                     |
 |----------|-------------------------------|
-| Backend  | .NET 8 / C# / EF Core         |
+| Backend  | .NET 10 / C# / EF Core         |
 | Base de datos | SQL Server               |
 | Frontend | Angular 17 (Standalone)        |
 
@@ -45,18 +45,6 @@ Si se desea editar `appsettings.json` y reemplazar el connection string:
 "DefaultConnection": "Server=TU_SERVIDOR;Database=FastStoreDb;Trusted_Connection=True;TrustServerCertificate=True;"
 ```
 
-Ejecutar migraciones y arrancar la API:
-
-En caso de requerirlo
-```bash
-dotnet tool install --global dotnet-ef
-```
-Ejecutar migraciones
-```bash
-dotnet ef migrations add InitialCreate
-dotnet ef database update
-dotnet run
-```
 La API quedará disponible en `http://localhost:5000`.
 
 > Los datos del archivo `productos.json` se cargan automáticamente al iniciar.
